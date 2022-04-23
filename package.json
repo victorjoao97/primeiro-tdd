@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "build": "babel src -d dist --ignore './src/__test__'",
+    "build": "npx babel src -d dist --ignore './src/__test__'",
     "start": "npm run build && node dist",
-    "coverage": "jest --coverage",
-    "coverage-png": "babel-node src/generate-img-coverage.js"
+    "coverage": "npx jest --coverage",
+    "coverage-png": "npx babel-node src/generate-img-coverage.js"
   },
   "repository": {
     "type": "git",
