@@ -4,7 +4,11 @@
   "description": "Primeiro projetinho usando TDD, espero que de certo",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "babel src -d dist --ignore './src/__test__'",
+    "start": "npm run build && node dist",
+    "coverage": "jest --coverage",
+    "coverage-png": "babel-node src/generate-img-coverage.js"
   },
   "repository": {
     "type": "git",
@@ -20,12 +24,15 @@
   },
   "homepage": "https://github.com/victorjoao97/primeiro-tdd#readme",
   "devDependencies": {
+    "@babel/cli": "^7.17.6",
     "@babel/core": "^7.17.9",
+    "@babel/node": "^7.16.8",
     "@babel/preset-env": "^7.16.11",
     "babel-jest": "^27.5.1",
     "jest": "^27.5.1"
   },
   "dependencies": {
-    "express": "^4.17.3"
+    "express": "^4.17.3",
+    "node-html-to-image": "^3.2.4"
   }
 }
