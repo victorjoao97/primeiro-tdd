@@ -1,6 +1,7 @@
 ### Este é meu primeiro projeto utilizando TDD
 
 ![example-workflow](https://github.com/victorjoao97/primeiro-tdd/actions/workflows/node.js.yml/badge.svg)
+![example-workflow](https://github.com/victorjoao97/primeiro-tdd/actions/workflows/node.js.windows.yml/badge.svg)
 
 Como inicio estou utilizando JS pois é mais rápido a codificação, então foi bem simples de iniciar, a curva é bem menor graças a Deus.
 Escrevi todos os testes do CRUD e logo depois comecei a implementar o código do CRUD.
