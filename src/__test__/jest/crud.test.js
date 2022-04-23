@@ -1,5 +1,5 @@
 import Crud from '../../crud'
-import ServiceDA from '../../serviceDA'
+import ServiceDA from '../../services/da'
 
 
 describe('Crud test', () => {

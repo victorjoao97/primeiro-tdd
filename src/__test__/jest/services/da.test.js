@@ -1,4 +1,4 @@
-import Crud from "../../crud";
+import Crud from "../../../crud";
 
 describe('Test DA', () => {
     test('lançar erro se não passar serviço ctor', () => {
