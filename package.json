@@ -1,0 +1,22 @@
+{
+  "name": "primeiro-tdd",
+  "version": "1.0.0",
+  "description": "Primeiro projetinho usando TDD, espero que de certo",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victorjoao97/primeiro-tdd.git"
+  },
+  "keywords": [
+    "tdd, primeiro-tdd, jest"
+  ],
+  "author": "João Victor Nascimento",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/victorjoao97/primeiro-tdd/issues"
+  },
+  "homepage": "https://github.com/victorjoao97/primeiro-tdd#readme"
+}
