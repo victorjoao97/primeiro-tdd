@@ -6,6 +6,6 @@ Logo depois fiz o Refactor, como de costume.
 
 No segundo passo, não achei necessário passar o ID para o crud, deixei a cargo do Serviço de Dados injetado pelo construtor no CRUD para gerenciar o ID, logo muitos testes falharam.
 
-Com os testes, rapidamente corrigi os testes que falharam e prontinho, tudo funcionando novamente!
+Com o auxilio dos testes, rapidamente corrigi os testes que falharam e prontinho, tudo funcionando novamente!
 
 TDD é lindo, e todos deviam usar ❤️👌
