@@ -1,8 +1,10 @@
 import express from 'express'
 import UsersController from './controllers/users'
 
-const app = express()
 const PORT = process.env.PORT || 3000
+
+const app = express()
+app.use(express.json())
 
 app.post('/', (req, res) => {
     const user = new UsersController()
