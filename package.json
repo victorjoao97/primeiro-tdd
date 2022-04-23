@@ -8,7 +8,7 @@
     "build": "babel src -d dist --ignore './src/__test__'",
     "start": "npm run build && node dist",
     "coverage": "jest --coverage",
-    "coverage-png": "npm run coverage && babel-node src/generate-img-coverage.js"
+    "coverage-png": "babel-node src/generate-img-coverage.js"
   },
   "repository": {
     "type": "git",
