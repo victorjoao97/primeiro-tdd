@@ -1,9 +1,14 @@
 export default class {
-    constructor(data) {
-        this.data = data
+    constructor(data = null) {
+        if (data) {
+            this.data = data
+            this.id = 1
+        }
     }
     insert(record) {
+        record.id = this.id++
         this.data.push(record)
+        return record
     }
     find(id) {
         return this.data.find(r => r.id === id) || null

@@ -6,7 +6,7 @@ export default class {
     insert(user) {
         if (this.findByEmail(user.email))
             throw Error('Não inserir registro duplicado')
-        this.serviceDA.insert(user)
+        return this.serviceDA.insert(user)
     }
     find(id) {
         return this.serviceDA.find(id)
