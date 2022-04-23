@@ -1,9 +1,7 @@
 export default class {
-    constructor(data = null) {
-        if (data) {
-            this.data = data
-            this.id = 1
-        }
+    constructor(data) {
+        this.data = data
+        this.id = 1
     }
     insert(record) {
         record.id = this.id++
