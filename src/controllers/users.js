@@ -1,4 +1,4 @@
-export default class {
+export default class UsersController {
     #crudBusiness
     constructor(crudBusiness) {
         if (!crudBusiness) throw Error('UserBusiness não foi injetado')

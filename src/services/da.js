@@ -1,4 +1,4 @@
-export default class {
+export default class DA {
     constructor(data) {
         this.data = data
         this.id = 1
