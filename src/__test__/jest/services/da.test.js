@@ -1,7 +1,7 @@
-import Crud from "../../../crud";
+import UserBusiness from "../../../business/users";
 
 describe('Test DA', () => {
     test('lançar erro se não passar serviço ctor', () => {
-        expect(() => new Crud()).toThrow('ServiceDA não foi injetado')
+        expect(() => new UserBusiness()).toThrow('ServiceDA não foi injetado')
     });
 });
