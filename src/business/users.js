@@ -1,4 +1,4 @@
-export default class {
+export default class UserBusiness {
     constructor(serviceDA) {
         if (!serviceDA) throw Error('ServiceDA não foi injetado')
         this.serviceDA = serviceDA
