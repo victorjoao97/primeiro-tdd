@@ -1,18 +1,19 @@
 import UserBusiness from '../../../business/users'
+import User from '../../../models/user'
 import ServiceDA from '../../../services/da'
 
 
 describe('User business test', () => {
     test('inserir registro e retornar somente ele', () => {
         const userBs = new UserBusiness(new ServiceDA([]))
-        const user = { name: 'Jim', email: 'i@jim.com' }
+        const user = new User({ name: 'Jim', email: 'i@jim.com' })
         const userAdded = userBs.insert(user)
         const userAdicionado = userBs.find(userAdded.id)
         expect(userAdded).toBe(userAdicionado)
     })
     test('inserir registro duplicado retornar erro', () => {
         const userBs = new UserBusiness(new ServiceDA([]))
-        const user = { name: 'Jim', email: 'i@jim.com' }
+        const user = new User({ name: 'Jim', email: 'i@jim.com' })
         expect(() => {
             userBs.insert(user)
             userBs.insert(user)
@@ -22,7 +23,7 @@ describe('User business test', () => {
         const userBs = new UserBusiness(new ServiceDA([
             { id: 1, name: 'Pan', email: 'i@jim.com' }
         ]))
-        const user = { name: 'Jim', email: 'i@jim.com' }
+        const user = new User({ name: 'Jim', email: 'i@jim.com' })
         expect(() => {
             userBs.insert(user)
         }).toThrow('Não inserir registro duplicado')
@@ -70,5 +71,12 @@ describe('User business test', () => {
         const user = { name: 'Jim', email: 'i@jim.com' }
         const userBs = new UserBusiness(new ServiceDA([user]))
         expect(userBs.delete(2)).toBe(false)
+    })
+    test('mostrar erro se criar usuario sem model', () => {
+        const userBs = new UserBusiness(new ServiceDA([]))
+        const user = { name: 'Jim', email: 'i@jim.com' }
+        expect(() => {
+            userBs.insert(user)
+        }).toThrow('Os dados devem pertencer a uma instancia de User')
     })
 })

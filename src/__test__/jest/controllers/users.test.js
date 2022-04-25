@@ -1,5 +1,6 @@
 import UserBusiness from "../../../business/users";
 import Users from "../../../controllers/users"
+import User from "../../../models/user";
 import DA from '../../../services/da'
 
 describe('Testes para a controller de Users', () => {
@@ -11,7 +12,7 @@ describe('Testes para a controller de Users', () => {
     });
     test('adicionar usuario pela controller', () => {
         const controller = new Users(new UserBusiness(new DA([])))
-        const userData = {name: 'Pan', email: 'i@pan.com'}
+        const userData = new User({name: 'Pan', email: 'i@pan.com'})
         expect(controller.addUser(userData)).toEqual(Object.assign({}, userData, {id: 1}))
     });
 });
