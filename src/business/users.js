@@ -1,9 +1,13 @@
+import User from "../models/user"
+
 export default class UserBusiness {
     constructor(serviceDA) {
         if (!serviceDA) throw Error('ServiceDA não foi injetado')
         this.serviceDA = serviceDA
     }
     insert(user) {
+        if (!(user instanceof User))
+            throw Error('Os dados devem pertencer a uma instancia de User')
         if (this.findByEmail(user.email))
             throw Error('Não inserir registro duplicado')
         return this.serviceDA.insert(user)
