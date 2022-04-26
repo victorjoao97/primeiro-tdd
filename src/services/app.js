@@ -35,7 +35,7 @@ app.put('/:userId', (req, res) => {
         return res.status(400).json(null)
     userData.id = parseInt(userId)
     const userModel = new User(userData)
-    if (!userModel.minimalInfoUser())
+    if (!userModel.validUserUpdate())
         return res.status(400).json(null)
     if (!userController.findId(userModel.id))
         return res.status(404).json(null)
