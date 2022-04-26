@@ -4,7 +4,13 @@ export default class UsersController {
         if (!crudBusiness) throw Error('UserBusiness não foi injetado')
         this.crudBusiness = crudBusiness
     }
-    addUser(userData) {
+    add(userData) {
         return this.crudBusiness.insert(userData)
+    }
+    findId(userId) {
+        return this.crudBusiness.find(userId)
+    }
+    update(userData) {
+        return this.crudBusiness.update(userData)
     }
 }
