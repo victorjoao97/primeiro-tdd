@@ -23,7 +23,7 @@ app.post('/', (req, res) => {
     if (!userData || !Object.keys(userData).length)
         return res.status(400).json('Nenhuma informação foi passada')
     const userModel = new User(userData)
-    if (!userModel.validUser())
+    if (!userModel.validUserCreate())
         return res.status(400).json('As informações estão incorretas')
     return res.json(userController.add(userModel))
 })
