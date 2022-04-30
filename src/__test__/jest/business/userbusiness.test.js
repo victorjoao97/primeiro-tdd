@@ -48,6 +48,14 @@ describe('User business test', () => {
         const userBs = new UserBusiness(new ServiceDA([user]))
         expect(userBs.findByEmail('i@jim.com')).toBe(null)
     })
+    test('buscar todos os registros', () => {
+        const users = [
+            { id: 1, name: 'Pan', email: 'i@pan.com' },
+            { id: 2, name: 'Jim', email: 'i@jim.com' }
+        ]
+        const userBs = new UserBusiness(new ServiceDA(users))
+        expect(userBs.findAll()).toHaveLength(2)
+    })
     test('atualizar registro que existe', () => {
         const user = { id: 2, name: 'Pan', email: 'i@pan.com' }
         const userBs = new UserBusiness(new ServiceDA([user]))

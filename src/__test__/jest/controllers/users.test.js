@@ -25,4 +25,21 @@ describe('Testes para a controller de Users', () => {
         const controller = new UsersController(new UserBusiness(new DA([userValid])))
         expect(controller.findId(2)).toEqual(null)
     });
+    test('buscar todos os usuarios', () => {
+        const users = [
+            { id: 1, name: 'Pan', email: 'i@pan.com' },
+            { id: 2, name: 'Jim', email: 'i@jim.com' }
+        ]
+        const controller = new UsersController(new UserBusiness(new DA(users)))
+        expect(controller.findAll()).toHaveLength(2)
+    });
+    test('deletar usuario', () => {
+        const users = [
+            { id: 1, name: 'Pan', email: 'i@pan.com' },
+            { id: 2, name: 'Jim', email: 'i@jim.com' }
+        ]
+        const controller = new UsersController(new UserBusiness(new DA(users)))
+        expect(controller.delete(1)).toBeTruthy()
+        expect(controller.findAll()).toHaveLength(1)
+    });
 });
