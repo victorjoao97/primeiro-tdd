@@ -4,42 +4,55 @@ import UserBusiness from '../business/users'
 import User from '../models/user'
 import DA from './da'
 
-const app = express()
-app.use(express.json())
+function AppMake() {
+    const app = express()
+    app.use(express.json())
 
-const userBs = new UserBusiness(new DA([]))
-const userController = new UsersController(userBs)
+    const userBs = new UserBusiness(new DA([]))
+    const userController = new UsersController(userBs)
 
-app.get('/:userId', (req, res) => {
-    const {userId} = req.params
-    const user = userController.findId(parseInt(userId))
-    if (user)
-        return res.json(user)
-    else res.status(404).json()
-})
+    app.get('/:userId', (req, res) => {
+        const { userId } = req.params
+        const user = userController.findId(+userId)
+        if (user)
+            return res.json(user)
+        else res.status(404).json()
+    })
 
-app.post('/', (req, res) => {
-    const userData = req.body
-    if (!userData || !Object.keys(userData).length)
-        return res.status(400).json('Nenhuma informação foi passada')
-    const userModel = new User(userData)
-    if (!userModel.validUserCreate())
-        return res.status(400).json('As informações estão incorretas')
-    return res.json(userController.add(userModel))
-})
+    app.get('/', (req, res) => {
+        return res.json(userController.findAll())
+    })
 
-app.put('/:userId', (req, res) => {
-    const userData = req.body
-    const {userId} = req.params
-    if (!userData || !Object.keys(userData).length)
-        return res.status(400).json(null)
-    userData.id = parseInt(userId)
-    const userModel = new User(userData)
-    if (!userModel.validUserUpdate())
-        return res.status(400).json(null)
-    if (!userController.findId(userModel.id))
-        return res.status(404).json(null)
-    return res.json(userController.update(userData))
-})
+    app.post('/', (req, res) => {
+        const userData = req.body
+        if (!userData || !Object.keys(userData).length)
+            return res.status(400).json('Nenhuma informação foi passada')
+        const userModel = new User(userData)
+        if (!userModel.validUserCreate())
+            return res.status(400).json('As informações estão incorretas')
+        return res.json(userController.add(userModel))
+    })
 
-export default app
+    app.put('/:userId', (req, res) => {
+        const userData = req.body
+        const { userId } = req.params
+        if (!userData || !Object.keys(userData).length)
+            return res.status(400).json(null)
+        userData.id = parseInt(userId)
+        const userModel = new User(userData)
+        if (!userModel.validUserUpdate())
+            return res.status(400).json(null)
+        if (!userController.findId(userModel.id))
+            return res.status(404).json(null)
+        return res.json(userController.update(userData))
+    })
+
+    app.delete('/:userId', (req, res) => {
+        const { userId } = req.params
+        userController.delete(+userId)
+        return res.status(200).send()
+    })
+
+    return app
+}
+export default AppMake
