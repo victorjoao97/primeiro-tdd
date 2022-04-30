@@ -20,5 +20,5 @@ TDD é lindo, e todos deviam usar ❤️👌
 
 # Design de Software
 - Tentando aplicar o Clean Architecture
-    - Dessa forma separei as camadas do projeto
+    - Dessa forma separei as camadas do projeto<br>
     ![image](/Architecture.png)
