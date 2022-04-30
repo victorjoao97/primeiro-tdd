@@ -1,4 +1,4 @@
-### Este é meu primeiro projeto utilizando TDD
+# Este é meu primeiro projeto utilizando TDD
 
 ![example-workflow](https://github.com/victorjoao97/primeiro-tdd/actions/workflows/node.js.yml/badge.svg)
 ![example-workflow](https://github.com/victorjoao97/primeiro-tdd/actions/workflows/node.js.windows.yml/badge.svg)
@@ -13,3 +13,12 @@ No segundo passo, não achei necessário passar o ID para o crud, deixei a cargo
 Com o auxilio dos testes, rapidamente corrigi os testes que falharam e prontinho, tudo funcionando novamente!
 
 TDD é lindo, e todos deviam usar ❤️👌
+
+# Design Patterns adotados
+- Dependency Injection
+    - A controller utiliza a business injetada por parametro, e a business por sua vez utiliza a serviço de acesso a dados injetado por parametro
+
+# Design de Software
+- Tentando aplicar o Clean Architecture
+    - Dessa forma separei as camadas do projeto
+    ![image](/Architecture.png)
