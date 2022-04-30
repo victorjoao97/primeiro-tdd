@@ -15,6 +15,9 @@ export default class UserBusiness {
     find(id) {
         return this.serviceDA.find(id)
     }
+    findAll() {
+        return this.serviceDA.findAll()
+    }
     findByEmail(email) {
         return this.serviceDA.where(r => r.email === email)[0] || null
     }
