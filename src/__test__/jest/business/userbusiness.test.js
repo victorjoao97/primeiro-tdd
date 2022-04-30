@@ -1,5 +1,5 @@
 import UserBusiness from '../../../business/users'
-import NotFoundException from '../../../models/exceptions/notfound'
+import {ConflictException, NotFoundException} from '../../../models/exceptions'
 import User from '../../../models/user'
 import ServiceDA from '../../../services/da'
 
@@ -18,7 +18,7 @@ describe('User business test', () => {
         expect(() => {
             userBs.insert(user)
             userBs.insert(user)
-        }).toThrow('Não inserir registro duplicado')
+        }).toThrow(ConflictException)
     })
     test('inserir registro email duplicado retornar erro', () => {
         const userBs = new UserBusiness(new ServiceDA([
@@ -27,7 +27,7 @@ describe('User business test', () => {
         const user = new User({ name: 'Jim', email: 'i@jim.com' })
         expect(() => {
             userBs.insert(user)
-        }).toThrow('Não inserir registro duplicado')
+        }).toThrow(ConflictException)
     })
     test('buscar registro pelo id e retornar registro', () => {
         const user = { id: 4, name: 'Pan', email: 'i@jim.com' }
@@ -72,7 +72,7 @@ describe('User business test', () => {
         const userBs = new UserBusiness(new ServiceDA(users))
         expect(() => {
             userBs.update({id: 2, email: 'i@pam.com'})
-        }).toThrow('Este email já está sendo utilizado')
+        }).toThrow(ConflictException)
     })
     test('nao atualizar registro que não existe', () => {
         const user = { id: 4, name: 'Jim', email: 'i@jim.com' }
@@ -94,12 +94,5 @@ describe('User business test', () => {
         expect(() => {
             userBs.delete(2)
         }).toThrow(NotFoundException)
-    })
-    test('mostrar erro se criar usuario sem model', () => {
-        const userBs = new UserBusiness(new ServiceDA([]))
-        const user = { name: 'Jim', email: 'i@jim.com' }
-        expect(() => {
-            userBs.insert(user)
-        }).toThrow('Os dados devem pertencer a uma instancia de User')
     })
 })

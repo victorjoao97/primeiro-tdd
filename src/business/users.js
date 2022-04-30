@@ -1,5 +1,5 @@
-import NotFoundException from "../models/exceptions/notfound"
 import User from "../models/user"
+import { NotFoundException, IncompleteDataException, WithoutDataException, ConflictException } from '../models/exceptions'
 
 export default class UserBusiness {
     constructor(serviceDA) {
@@ -7,11 +7,14 @@ export default class UserBusiness {
         this.serviceDA = serviceDA
     }
     insert(user) {
-        if (!(user instanceof User))
-            throw Error('Os dados devem pertencer a uma instancia de User')
+        if (!user || !Object.keys(user).length)
+            throw new WithoutDataException()
+        const userModel = new User(user)
+        if (!userModel.validUserCreate())
+            throw new IncompleteDataException()
         if (this.findByEmail(user.email))
-            throw Error('Não inserir registro duplicado')
-        return this.serviceDA.insert(user)
+            throw new ConflictException()
+        return this.serviceDA.insert(userModel)
     }
     find(id) {
         return this.serviceDA.find(id)
@@ -23,10 +26,20 @@ export default class UserBusiness {
         return this.serviceDA.where(r => r.email === email)[0] || null
     }
     update(userDTO) {
+        if (!userDTO || !Object.keys(userDTO).length)
+            throw new WithoutDataException()
+
+        const userModel = new User(userDTO)
+
+        if (!userModel.validUserUpdate())
+            throw new IncompleteDataException()
+
         const user = this.find(userDTO.id)
         if (!user) throw new NotFoundException()
+
         if (userDTO.email !== user.email && this.findByEmail(userDTO.email))
-            throw Error('Este email já está sendo utilizado')
+            throw new ConflictException()
+
         return this.serviceDA.update(userDTO)
     }
     delete(id) {

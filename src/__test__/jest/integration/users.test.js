@@ -35,7 +35,6 @@ describe('Testar a integração da API users', () => {
         .send({id: 2, name: 'Pan', email: 'i@pan.com'})
 
         expect(res.statusCode).toEqual(409)
-        expect(res.body).toEqual('Não inserir registro duplicado')
     });
     test('criar usuário der algum erro retornar 500', async () => {
         const mockBusiness = jest.fn(() => { throw Error() })
@@ -75,8 +74,8 @@ describe('Testar a integração da API users', () => {
     });
     test('atualizar usuario que nao existe', async () => {
         const res = await supertest(appMake())
-        .put('/' + 10)
-        .send({name: 'Pan'})
+        .put('/')
+        .send({id: 10, name: 'Pan'})
 
         expect(res.statusCode).toEqual(404)
     });
@@ -84,8 +83,8 @@ describe('Testar a integração da API users', () => {
         const app = appMake()
         await sutCreateUser(app)
         const res = await supertest(app)
-        .put('/' + 1)
-        .send({email: 'iam@pan.com'})
+        .put('/')
+        .send({id: 1, email: 'iam@pan.com'})
 
         const find = await supertest(app)
         .get('/' + 1)
@@ -98,23 +97,44 @@ describe('Testar a integração da API users', () => {
     });
     test('atualizar usuario que existe sem passar body', async () => {
         const res = await supertest(appMake())
-        .put('/' + 1)
+        .put('/')
 
         expect(res.statusCode).toEqual(400)
     });
     test('atualizar usuario que existe body vazio', async () => {
         const res = await supertest(appMake())
-        .put('/' + 1)
+        .put('/')
         .send({})
 
         expect(res.statusCode).toEqual(400)
     });
     test('atualizar usuario que existe com dados invalidos', async () => {
-        const res = await supertest(appMake())
-        .put('/' + 1)
-        .send({source: '/bin/sh'})
+        const app = await appMake()
+        await sutCreateUser(app)
+        const res = await supertest(app)
+        .put('/')
+        .send({id: 1, source: '/bin/sh'})
 
         expect(res.statusCode).toEqual(400)
+    });
+    test('atualizar usuario que existe com email duplicado', async () => {
+        const app = await appMake()
+        await sutCreateUser(app)
+        await sutCreateUser(app, {id: 2, name: 'Jim', email: 'i@jim.com'})
+        const res = await supertest(app)
+        .put('/')
+        .send({id: 1, email: 'i@jim.com'})
+
+        expect(res.statusCode).toEqual(409)
+    });
+    test('atualizar usuario que existe com email duplicado', async () => {
+        const mockBusiness = jest.fn(() => { throw Error() })
+        const app = await appMake(mockBusiness)
+        const res = await supertest(app)
+        .put('/')
+        .send({id: 1, email: 'i@jim.com'})
+
+        expect(res.statusCode).toEqual(500)
     });
     test('buscar todos os usuarios retornar lista', async () => {
         const app = appMake()

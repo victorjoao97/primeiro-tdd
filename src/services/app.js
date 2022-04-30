@@ -3,7 +3,7 @@ import UsersController from '../controllers/users'
 import UserBusiness from '../business/users'
 import User from '../models/user'
 import DA from './da'
-import NotFoundException from '../models/exceptions/notfound'
+import {ConflictException, IncompleteDataException, NotFoundException, WithoutDataException} from '../models/exceptions'
 
 function AppMake(userBs = new UserBusiness(new DA([])), userController = new UsersController(userBs)) {
     const app = express()
@@ -23,34 +23,35 @@ function AppMake(userBs = new UserBusiness(new DA([])), userController = new Use
 
     app.post('/', (req, res) => {
         const userData = req.body
-        if (!userData || !Object.keys(userData).length)
-            return res.status(400).json('Nenhuma informação foi passada')
-        const userModel = new User(userData)
-        if (!userModel.validUserCreate())
-            return res.status(400).json('As informações estão incorretas')
 
         try {
-            return res.json(userController.add(userModel))
+            return res.json(userController.add(userData))
         } catch (error) {
-            if (error.message === 'Não inserir registro duplicado')
-                return res.status(409).json(error.message)
-            else
-                return res.status(500).send()
+            if (error instanceof NotFoundException)
+                return res.status(404).send()
+            else if (error instanceof ConflictException)
+                return res.status(409).send()
+            else if (error instanceof WithoutDataException || error instanceof IncompleteDataException)
+                return res.status(400).send()
+
+            return res.status(500).send()
         }
     })
 
-    app.put('/:userId', (req, res) => {
+    app.put('/', (req, res) => {
         const userData = req.body
-        const { userId } = req.params
-        if (!userData || !Object.keys(userData).length)
-            return res.status(400).send()
-        userData.id = parseInt(userId)
-        const userModel = new User(userData)
-        if (!userModel.validUserUpdate())
-            return res.status(400).send()
-        if (!userController.findId(userModel.id))
-            return res.status(404).send()
-        return res.json(userController.update(userData))
+        try {
+            return res.json(userController.update(userData))
+        } catch (error) {
+            if (error instanceof NotFoundException)
+                return res.status(404).send()
+            else if (error instanceof ConflictException)
+                return res.status(409).send()
+            else if (error instanceof WithoutDataException || error instanceof IncompleteDataException)
+                return res.status(400).send()
+
+            return res.status(500).send()
+        }
     })
 
     app.delete('/:userId', (req, res) => {
@@ -62,8 +63,8 @@ function AppMake(userBs = new UserBusiness(new DA([])), userController = new Use
         } catch (error) {
             if (error instanceof NotFoundException)
                 return res.status(404).send()
-            else
-                return res.status(500).send()
+
+            return res.status(500).send()
         }
     })
 
