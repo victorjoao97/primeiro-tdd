@@ -49,16 +49,28 @@ describe('User business test', () => {
         expect(userBs.findByEmail('i@jim.com')).toBe(null)
     })
     test('atualizar registro que existe', () => {
-        const user = { name: 'Pan', email: 'i@pan.com' }
+        const user = { id: 2, name: 'Pan', email: 'i@pan.com' }
         const userBs = new UserBusiness(new ServiceDA([user]))
-        userBs.update({name: 'Pan update'})
+        userBs.update({id: 2, name: 'Pan update'})
         const userUpdated = userBs.find(user.id)
-        expect(userUpdated).toEqual({ name: 'Pan update', email: 'i@pan.com' })
+        expect(userUpdated).toEqual({ id: 2, name: 'Pan update', email: 'i@pan.com' })
+    })
+    test('mostrar erro se atualizar registro com email que já existe', () => {
+        const users = [
+            { id: 2, name: 'Pan', email: 'i@pan.com' },
+            { id: 3, name: 'Pam', email: 'i@pam.com' }
+        ]
+        const userBs = new UserBusiness(new ServiceDA(users))
+        expect(() => {
+            userBs.update({id: 2, email: 'i@pam.com'})
+        }).toThrow('Este email já está sendo utilizado')
     })
     test('nao atualizar registro que não existe', () => {
         const user = { id: 4, name: 'Jim', email: 'i@jim.com' }
         const userBs = new UserBusiness(new ServiceDA([user]))
-        expect(userBs.update({id: 1, name: 'Pan update'})).toBe(false)
+        expect(() => {
+            userBs.update({id: 1, name: 'Pan update'})
+        }).toThrow('Não é possivel atualizar este usuário pois ele não existe')
     })
     test('remover registro existente', () => {
         const user = { name: 'Jim', email: 'i@jim.com' }
@@ -68,9 +80,11 @@ describe('User business test', () => {
         expect(userNaoEncontrado).toBe(null)
     })
     test('remover registro inexistente', () => {
-        const user = { name: 'Jim', email: 'i@jim.com' }
+        const user = { id: 1, name: 'Jim', email: 'i@jim.com' }
         const userBs = new UserBusiness(new ServiceDA([user]))
-        expect(userBs.delete(2)).toBe(false)
+        expect(() => {
+            userBs.delete(2)
+        }).toThrow('Não é possivel remover este usuário pois ele não existe')
     })
     test('mostrar erro se criar usuario sem model', () => {
         const userBs = new UserBusiness(new ServiceDA([]))
