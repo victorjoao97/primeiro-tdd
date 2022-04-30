@@ -3,6 +3,7 @@ import UsersController from '../controllers/users'
 import UserBusiness from '../business/users'
 import User from '../models/user'
 import DA from './da'
+import NotFoundException from '../models/exceptions/notfound'
 
 function AppMake(userBs = new UserBusiness(new DA([])), userController = new UsersController(userBs)) {
     const app = express()
@@ -59,7 +60,7 @@ function AppMake(userBs = new UserBusiness(new DA([])), userController = new Use
             userController.delete(+userId)
             return res.status(204).send()
         } catch (error) {
-            if (error.message === 'Não é possivel remover este usuário pois ele não existe')
+            if (error instanceof NotFoundException)
                 return res.status(404).send()
             else
                 return res.status(500).send()

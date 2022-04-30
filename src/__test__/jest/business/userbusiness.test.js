@@ -1,4 +1,5 @@
 import UserBusiness from '../../../business/users'
+import NotFoundException from '../../../models/exceptions/notfound'
 import User from '../../../models/user'
 import ServiceDA from '../../../services/da'
 
@@ -78,7 +79,7 @@ describe('User business test', () => {
         const userBs = new UserBusiness(new ServiceDA([user]))
         expect(() => {
             userBs.update({id: 1, name: 'Pan update'})
-        }).toThrow('Não é possivel atualizar este usuário pois ele não existe')
+        }).toThrow(NotFoundException)
     })
     test('remover registro existente', () => {
         const user = { name: 'Jim', email: 'i@jim.com' }
@@ -92,7 +93,7 @@ describe('User business test', () => {
         const userBs = new UserBusiness(new ServiceDA([user]))
         expect(() => {
             userBs.delete(2)
-        }).toThrow('Não é possivel remover este usuário pois ele não existe')
+        }).toThrow(NotFoundException)
     })
     test('mostrar erro se criar usuario sem model', () => {
         const userBs = new UserBusiness(new ServiceDA([]))

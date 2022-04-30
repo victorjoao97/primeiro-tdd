@@ -1,3 +1,4 @@
+import NotFoundException from "../models/exceptions/notfound"
 import User from "../models/user"
 
 export default class UserBusiness {
@@ -23,16 +24,14 @@ export default class UserBusiness {
     }
     update(userDTO) {
         const user = this.find(userDTO.id)
-        if (!user)
-            throw Error('Não é possivel atualizar este usuário pois ele não existe')
+        if (!user) throw new NotFoundException()
         if (userDTO.email !== user.email && this.findByEmail(userDTO.email))
             throw Error('Este email já está sendo utilizado')
         return this.serviceDA.update(userDTO)
     }
     delete(id) {
         const userExists = this.find(id)
-        if (!userExists)
-            throw Error('Não é possivel remover este usuário pois ele não existe')
+        if (!userExists) throw new NotFoundException()
         return this.serviceDA.delete(id)
     }
 }
