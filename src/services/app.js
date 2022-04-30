@@ -4,12 +4,9 @@ import UserBusiness from '../business/users'
 import User from '../models/user'
 import DA from './da'
 
-function AppMake() {
+function AppMake(userBs = new UserBusiness(new DA([])), userController = new UsersController(userBs)) {
     const app = express()
     app.use(express.json())
-
-    const userBs = new UserBusiness(new DA([]))
-    const userController = new UsersController(userBs)
 
     app.get('/:userId', (req, res) => {
         const { userId } = req.params
@@ -30,27 +27,43 @@ function AppMake() {
         const userModel = new User(userData)
         if (!userModel.validUserCreate())
             return res.status(400).json('As informações estão incorretas')
-        return res.json(userController.add(userModel))
+
+        try {
+            return res.json(userController.add(userModel))
+        } catch (error) {
+            if (error.message === 'Não inserir registro duplicado')
+                return res.status(409).json(error.message)
+            else
+                return res.status(500).send()
+        }
     })
 
     app.put('/:userId', (req, res) => {
         const userData = req.body
         const { userId } = req.params
         if (!userData || !Object.keys(userData).length)
-            return res.status(400).json(null)
+            return res.status(400).send()
         userData.id = parseInt(userId)
         const userModel = new User(userData)
         if (!userModel.validUserUpdate())
-            return res.status(400).json(null)
+            return res.status(400).send()
         if (!userController.findId(userModel.id))
-            return res.status(404).json(null)
+            return res.status(404).send()
         return res.json(userController.update(userData))
     })
 
     app.delete('/:userId', (req, res) => {
         const { userId } = req.params
-        userController.delete(+userId)
-        return res.status(200).send()
+
+        try {
+            userController.delete(+userId)
+            return res.status(204).send()
+        } catch (error) {
+            if (error.message === 'Não é possivel remover este usuário pois ele não existe')
+                return res.status(404).send()
+            else
+                return res.status(500).send()
+        }
     })
 
     return app

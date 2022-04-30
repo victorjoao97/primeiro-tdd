@@ -25,6 +25,27 @@ describe('Testar a integração da API users', () => {
         .post('/')
         expect(res.statusCode).toEqual(400)
     });
+    test('criar usuário duplicado retornar 409', async () => {
+        const app = appMake()
+        await supertest(app)
+        .post('/')
+        .send({id: 1, name: 'Pan', email: 'i@pan.com'})
+        const res = await supertest(app)
+        .post('/')
+        .send({id: 2, name: 'Pan', email: 'i@pan.com'})
+
+        expect(res.statusCode).toEqual(409)
+        expect(res.body).toEqual('Não inserir registro duplicado')
+    });
+    test('criar usuário der algum erro retornar 500', async () => {
+        const mockBusiness = jest.fn(() => { throw Error() })
+        const app = appMake(mockBusiness)
+        const res = await supertest(app)
+        .post('/')
+        .send({id: 2, name: 'Pan', email: 'i@pan.com'})
+
+        expect(res.statusCode).toEqual(500)
+    });
     test('criar usuário com dados inválidos', async () => {
         const res1 = await supertest(appMake())
         .post('/')
@@ -58,7 +79,6 @@ describe('Testar a integração da API users', () => {
         .send({name: 'Pan'})
 
         expect(res.statusCode).toEqual(404)
-        expect(res.body).toBe(null)
     });
     test('atualizar usuario que existe', async () => {
         const app = appMake()
@@ -107,13 +127,30 @@ describe('Testar a integração da API users', () => {
         expect(res.statusCode).toEqual(200)
         expect(res.body).toHaveLength(2)
     });
-    test('deletar um usuario retornar 200', async () => {
+    test('deletar um usuario retornar 204', async () => {
         const app = appMake()
         await sutCreateUser(app)
 
         const res = await supertest(app)
         .delete('/' + 1)
 
-        expect(res.statusCode).toEqual(200)
+        expect(res.statusCode).toEqual(204)
+    });
+    test('deletar um usuario que não existe retornar 404', async () => {
+        const app = appMake()
+
+        const res = await supertest(app)
+        .delete('/' + 1)
+
+        expect(res.statusCode).toEqual(404)
+    });
+    test('deletar um usuario e retornar erro 500', async () => {
+        const mockBusiness = jest.fn(() => { throw Error() })
+        const app = appMake(mockBusiness)
+
+        const res = await supertest(app)
+        .delete('/' + 1)
+
+        expect(res.statusCode).toEqual(500)
     });
 });
