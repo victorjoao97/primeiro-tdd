@@ -16,13 +16,11 @@ export default class DA {
     }
     update(recordToSave) {
         const recordIndex = this.data.findIndex(r => r.id === recordToSave.id)
-        if (recordIndex < 0) return false
         Object.assign(this.data[recordIndex], recordToSave)
         return true
     }
     delete(id) {
         const recordIndex = this.data.findIndex(r => r.id === id)
-        if (recordIndex < 0) return false
         this.data.splice(recordIndex, 1)
         return true
     }
