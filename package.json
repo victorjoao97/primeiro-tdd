@@ -8,6 +8,7 @@
     "test:watch": "jest src --watchAll --runInBand --detectOpenHandles",
     "build": "./node_modules/.bin/babel src -d dist --ignore './src/__test__'",
     "start": "npm run build && node dist",
+    "start:watch": "babel-watch src -I",
     "coverage": "jest --coverage",
     "coverage-png": "babel-node src/generate-img-coverage.js"
   },
@@ -30,6 +31,7 @@
     "@babel/node": "^7.16.8",
     "@babel/preset-env": "^7.16.11",
     "babel-jest": "^27.5.1",
+    "babel-watch": "^7.7.0",
     "jest": "^27.5.1",
     "supertest": "^6.2.2"
   },
