@@ -18,10 +18,18 @@ export default class UserBusiness {
     findByEmail(email) {
         return this.serviceDA.where(r => r.email === email)[0] || null
     }
-    update(user) {
-        return this.serviceDA.update(user)
+    update(userDTO) {
+        const user = this.find(userDTO.id)
+        if (!user)
+            throw Error('Não é possivel atualizar este usuário pois ele não existe')
+        if (userDTO.email !== user.email && this.findByEmail(userDTO.email))
+            throw Error('Este email já está sendo utilizado')
+        return this.serviceDA.update(userDTO)
     }
     delete(id) {
+        const userExists = this.find(id)
+        if (!userExists)
+            throw Error('Não é possivel remover este usuário pois ele não existe')
         return this.serviceDA.delete(id)
     }
 }
