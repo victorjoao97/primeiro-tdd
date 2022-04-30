@@ -10,7 +10,13 @@ export default class UsersController {
     findId(userId) {
         return this.crudBusiness.find(userId)
     }
+    findAll() {
+        return this.crudBusiness.findAll()
+    }
     update(userData) {
         return this.crudBusiness.update(userData)
+    }
+    delete(id) {
+        return this.crudBusiness.delete(id)
     }
 }
