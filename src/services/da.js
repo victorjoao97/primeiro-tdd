@@ -11,6 +11,9 @@ export default class DA {
     find(id) {
         return this.data.find(r => r.id === id) || null
     }
+    findAll() {
+        return this.data
+    }
     where(filter) {
         return this.data.filter(filter)
     }
